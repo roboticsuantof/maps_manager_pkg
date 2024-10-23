@@ -1,0 +1,32 @@
+<launch>
+
+    <arg name="pi"	default="3.141592"/>
+    <arg name="pi/2"	default="1.57"/>
+    <arg name="rviz"	default="true"/>
+    <arg name="robot_name"	default="arco"/>
+    <arg name="only_odometry"	default="false"/>
+
+    <arg name="resolution_octomap" default="0.05"/>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="ground_broadcaster" args="0 0 0.40 0 0 0 ground camera_init"/> 
+    <node pkg="tf2_ros" type="static_transform_publisher" name="mapping_base_link_aft" args="0 0 -0.4 0 0 0 aft_mapped $(arg robot_name)/base_link" required="true"/>    
+    <node pkg="tf2_ros" type="static_transform_publisher" name="mapping_ground" args="0 0 0 0 0 0 ground map"/>     
+    
+    <include file="$(find marsupial_launchers)/mapping_launch/aloam.launch">
+        <arg name="only_odometry"       value="$(arg only_odometry)"/>
+        <arg name="robot_name"          value="$(arg robot_name)"/>
+        <arg name="init_frame"          value="odom"/>
+        <arg name="laser_odom_frame"    value="base_link"/>
+        <arg name="imu_topic"           value="imu"/>
+
+    </include>
+
+    <!-- <node pkg="timed_roslaunch" type="timed_roslaunch.sh"
+        args="10 marsupial_launchers octomap_server_mapping_loam.launch resolution:=$(arg resolution_octomap)"
+        name="octomap_servers" output="screen">
+    </node> -->
+
+    <!-- RViz -->
+    <!-- <node pkg="rviz" name="rviz" type="rviz" args="-d $(find marsupial_launchers)/viz/mapping.rviz" if="$(arg rviz)"/> -->
+
+</launch>

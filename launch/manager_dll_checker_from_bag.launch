@@ -1,0 +1,13 @@
+<launch>
+	<arg name="map_file" default="new_rellano45"/>
+
+    <include file="$(find marsupial_launchers)/arco_launch/dll_arco.launch">
+        <arg name="map"       value="$(arg map_file)"/>
+    </include>
+
+    
+    <node pkg="timed_roslaunch" type="timed_roslaunch.sh" name="timed_uav_dll" output="screen"
+            args="6 robag play  ">
+    </node>
+
+</launch>

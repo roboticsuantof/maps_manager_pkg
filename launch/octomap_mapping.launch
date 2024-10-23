@@ -1,0 +1,37 @@
+<!-- 
+  Example launch file for octomap_server mapping: 
+  Listens to incoming PointCloud2 data and incrementally builds an octomap. 
+  The data is sent out in different representations. 
+
+  Copy this file into your workspace and adjust as needed, see
+  www.ros.org/wiki/octomap_server for details  
+-->
+<launch>
+	<arg name="cloud_in" default="/os1_cloud_node/points_non_dense"/>
+	<arg name="frame_id" default="world"/>
+    <arg name="base_frame_id" default="base_link"/>
+    
+    <arg name="height_map" default="true"/>
+    <arg name="sensor_model/max_range" default="80"/>
+    <arg name="latch" default="false"/>
+    <arg name="resolution"  default="0.05"/>
+
+    <node pkg="octomap_server" type="octomap_server_node" name="octomap_server" output="screen">
+        <remap from="/cloud_in" to="$(arg cloud_in)"/>
+        <remap from="/projected_map" to="/map"/>
+        <param name="frame_id"    value="$(arg frame_id)" />
+        <param name="base_frame_id"    value="$(arg base_frame_id)" />
+        <param name="height_map"    value="$(arg height_map)" />
+        <param name="sensor_model/max_range"    value="$(arg sensor_model/max_range)" />
+        <param name="latch" value="$(arg latch)"/>
+        <param name="resolution"    value="$(arg resolution)"/>
+        <param name="occupancy_min_z"   value="-1"/>
+        <param name="occupancy_max_z"   value="20"/>
+        <param name="occupancy_2d_min_z"   value="0.3"/>
+        <param name="occupancy_2d_max_z"   value="1"/>
+        <param name="filter_ground"	value="false"/>
+        <param name="pointcloud_min_z"   value="-1"/>
+        <param name="pointcloud_max_z"   value="20"/>
+        <param name="max_depth"   value="40"/>
+    </node>
+</launch>

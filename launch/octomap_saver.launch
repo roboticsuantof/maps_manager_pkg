@@ -1,0 +1,14 @@
+<launch>
+	<arg name="map_name"	default="map_saved"/>
+	<arg name="proj_map_topic" default="/map"/>
+	<arg name="octomap_in" default="/octomap_full"/>
+	<arg name="frame_id" default="world"/>
+
+
+	<node pkg="octomap_server" type="octomap_saver" name="octomap_saver" args=" -f $(arg map_name).bt" output="screen">
+		<remap from="/octomap_full" to="$(arg octomap_in)" />
+		<param name="frame_id" value="$(arg frame_id)"/>
+	</node>
+	<!-- <node pkg="map_server" type="map_saver" name="map_saver" args="-f $(arg map_name) map:=$(arg proj_map_topic)" output="screen"/> -->
+
+</launch>

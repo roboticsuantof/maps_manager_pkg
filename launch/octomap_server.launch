@@ -1,0 +1,22 @@
+<launch>
+	
+	<!-- <arg name="map_file" default="teatro"/> -->
+    <!-- <arg name="path_map_file" default="$(find marsupial_optimizer)/maps/$(arg map_file).bt"/> -->
+	<arg name="map_file" default="agriculture"/>
+    <arg name="path_map_file" default="$(find maps_manager_pkg)/maps/$(arg map_file).bt"/>
+    
+
+	<arg name="node_name" default="octomap_server_full"/>
+    <arg name="published_pc" default="/octomap_point_cloud_centers"/>
+    <arg name="rviz" default="true"/>
+    <arg name="viz_file" default="viz_only_map"/>
+
+	<node pkg="octomap_server" type="octomap_server_node" name="$(arg node_name)_node" output="screen" args="$(arg path_map_file)">
+		<param name="base_frame_id" value="base_link"/>
+		<param name="frame_id" value="world"/>
+        <remap from="/octomap_point_cloud_centers" to="$(arg published_pc)"/>
+	</node>
+
+    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find maps_manager_pkg)/viz/$(arg viz_file).rviz" if="$(arg rviz)"/>
+
+</launch>
