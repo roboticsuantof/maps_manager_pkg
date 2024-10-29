@@ -18,10 +18,10 @@
 		<param name="frame_id" value="$(arg frame)"/>
 		<param name="occupancy_min_z" value="-05"/>
 		<param name="occupancy_max_z" value="10"/>
-		<param name="pointcloud_min_z" value="-0.5"/>
+		<param name="pointcloud_min_z" value="-6"/>
 		<param name="pointcloud_max_z" value="10"/>
 		<!-- maximum range to integrate (speedup!) -->
-		<param name="sensor_model/max_range" value="80.0" />
+		<param name="sensor_model/max_range" value="200.0" />
 		<!-- data source to integrate (PointCloud2) -->
 		<remap from="cloud_in" to="$(arg cloud_in_trav)" />
 		<remap from="/octomap_full" to="/octomap_traversable" />
@@ -35,10 +35,10 @@
 		<param name="frame_id" value="$(arg frame)"/>
 		<param name="occupancy_min_z" value="-05"/>
 		<param name="occupancy_max_z" value="10"/>
-		<param name="pointcloud_min_z" value="-0.5"/>
+		<param name="pointcloud_min_z" value="-6"/>
 		<param name="pointcloud_max_z" value="10"/>
 		<!-- maximum range to integrate (speedup!) -->
-		<param name="sensor_model/max_range" value="80.0" />
+		<param name="sensor_model/max_range" value="200.0" />
 		<!-- data source to integrate (PointCloud2) -->
 		<remap from="cloud_in" to="$(arg cloud_in_obst)" />
 		<remap from="/octomap_full" to="/octomap_obstacles" />
