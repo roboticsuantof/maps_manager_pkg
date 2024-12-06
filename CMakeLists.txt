@@ -3,6 +3,7 @@ project(maps_manager_pkg)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++17)
+set(CMAKE_BUILD_TYPE Release) #None, Debug, Release, RelWithDebInfo, MinSizeRel
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -177,6 +178,10 @@ set(EXTERNAL_LIBS ${PCL_LIBRARIES} )
 
 add_executable(region_growing_segmentation_node src/region_growing_segmentation_node.cpp)
 target_link_libraries (region_growing_segmentation_node ${PCL_LIBRARIES} ${catkin_LIBRARIES} )
+
+add_executable(region_growing_node src/region_growing_node.cpp)
+target_link_libraries (region_growing_node ${PCL_LIBRARIES} ${catkin_LIBRARIES} )
+
 
 find_package(octomap REQUIRED)
 add_library(gazebo_world_octomap_plugin SHARED src/world_to_octomap_plugin.cpp)

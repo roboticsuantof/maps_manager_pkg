@@ -3,35 +3,32 @@
 	<arg name="ugv_base_frame" default="ugv_base_link"/>
 	<arg name="use_tf_pose" default="false"/>
 	<arg name="merge_clusters_by_normals" default="true"/>
-	<arg name="filtered_PointCloud" default="true"/>
-	<arg name="apply_segmentation" default="false"/>
+	<arg name="do_segmentation" default="true"/>
 
-	<node pkg="maps_manager_pkg" type="region_growing_segmentation_node" name="region_growing_segmentation_node" output="screen"># launch-prefix="gdb -ex run --args">
+	<node pkg="maps_manager_pkg" type="region_growing_node" name="region_growing_node" output="screen"># launch-prefix="gdb -ex run --args">
 		<param name="world_frame" value="world" />
 		<param name="ugv_base_frame" value="$(arg ugv_base_frame)" />
 		<param name="debug_rgs" value="true" />
 		<param name="latch_topic" value="true" />
 		<param name="merge_clusters_by_normals" value="$(arg merge_clusters_by_normals)" /> # Merge clusters
-		<param name="filtered_PointCloud" value="$(arg filtered_PointCloud)" /> # Merge clusters
-		<param name="delimit_PointCloud" value="true" /> # Delimit PointCloud in Z axes
-		<param name="second_delimit_PointCloud" value="true" /> # Delimit PointCloud in Z axes
-		<param name="apply_segmentation" value="$(arg apply_segmentation)"/> 
 		<param name="pc_sub" value="$(arg pc_sub_)"/>
 		<param name="use_tf_pose" value="$(arg use_tf_pose)"/>
-		<param name="init_pose_x" value="-6.98"/>
-		<param name="init_pose_y" value="5.48"/>
+		<param name="init_pose_x" value="-3.61"/>
+		<param name="init_pose_y" value="0.27"/>
 		<param name="init_pose_z" value="0.17"/>
+		<param name="do_segmentation" value="$(arg do_segmentation)"/>
+		
 		<!-- Parameter to manipulate segmentation -->
 		<param name="z_filter_min" value="0.03"/> // min altitude of traversable zone
 		<param name="z_filter_max" value="0.20"/> // max altitude of traversable zone
 		<param name="z_map_max" value="3.0"/> // max altitude of the map
-		<param name="min_size_cluster" value="5"/>
+		<param name="min_size_cluster" value="1"/>
 		<!-- <param name="max_size_cluster" value="10000000"/> -->
 		<param name="normal_estimator_search" value="20"/> # Number of nearest neighbors to compute normal
-		<param name="num_neighbours" value="80"/> # [10-30], Each point will consider its "num_neighbours" nearest neighbors for clustering.
-		<param name="degree_smoothness_threshold" value="12.0"/> # [0 - 180], Controls how much angular variation between neighboring points' normals is allowed within a cluster.
-		<param name="curvature_threshold" value="0.15"/> # [0 - 1], Clusters constrained by the curvature of the points. Points with curvature greater than the threshold are excluded from the current cluster and treated as separate.
-		<param name="normal_threshold" value="3.14"/> # Important, make a significative clustering
+		<param name="num_neighbours" value="40"/> # [10-30], Each point will consider its "num_neighbours" nearest neighbors for clustering.
+		<param name="degree_smoothness_threshold" value="1.0"/> # [0 - 180], Controls how much angular variation between neighboring points' normals is allowed within a cluster.
+		<param name="curvature_threshold" value="0.9"/> # [0 - 1], Clusters constrained by the curvature of the points. Points with curvature greater than the threshold are excluded from the current cluster and treated as separate.
+		<param name="normal_threshold" value="0.998"/> # Important, make a significative clustering
 	</node>
 
 </launch>
