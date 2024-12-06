@@ -1,0 +1,30 @@
+<launch>
+
+    <param name="use_sim_time" value="true"/>
+    <env name="IGN_GAZEBO_RESOURCE_PATH" value="$(find sewer_simulator)/models:$(find sewer_simulator)/models/sensors:$(find sewer_simulator)/worlds/"/>
+
+    # --------------------------------------------------------------------- PARAMETER --------------------------------------------------------------------- 
+    ## Parameter
+    <arg name="world_name" default="sewer"/>
+
+    # --------------------------------------------------------------------- NODES --------------------------------------------------------------------- 
+    
+    # ---------------------------------------------------Start Gazebo environment ---------------------------------------------------
+    # Node regarding with World
+    <include file="$(find ros_ign_gazebo)/launch/ign_gazebo.launch">
+        <arg name="ign_args" value="-r -v4 $(find sewer_simulator)/worlds/$(arg world_name).world"/>
+        <env name="IGN_GAZEBO_RESOURCE_PATH" value="$(optenv IGN_GAZEBO_RESOURCE_PATH):$(find sewer_simulator)/models:$(find sewer_simulator)/models/sensors:$(find sewer_simulator)/worlds/"/>
+    </include>
+
+    # node provides a network bridge which enables the exchange of messages between ROS and Gazebo Transport
+        ## args: declare inf. about mesage to exchange (format: name_topic@type_ros_msgs@type_ign_gazebo_msgs )
+    <node
+        pkg="ros_ign_bridge"
+        type="parameter_bridge"
+        name="$(anon ros_ign_bridge)"
+        output="screen"
+        args="  /world/$(arg world_name)/pose/info@tf2_msgs/TFMessage@ignition.msgs.Pose_V
+                /clock@rosgraph_msgs/Clock@ignition.msgs.Clock ">
+    </node>
+
+</launch>

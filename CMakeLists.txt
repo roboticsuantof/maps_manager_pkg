@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(maps_manager_pkg)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++17)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -16,8 +16,11 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   octomap_msgs
   octomap_ros
+  message_generation
 )
 
+find_package(Eigen3 REQUIRED)
+find_package(gazebo REQUIRED)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -59,11 +62,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+  FILES
+  Octomap.srv
+)
+generate_messages(DEPENDENCIES geometry_msgs octomap_msgs std_msgs)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -108,12 +111,12 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
- INCLUDE_DIRS include
+ INCLUDE_DIRS include ${Eigen3_INCLUDE_DIRS}
  LIBRARIES maps_manager_pkg
- CATKIN_DEPENDS roscpp rospy std_msgs pcl_conversions pcl_ros octomap_msgs octomap_ros
+ CATKIN_DEPENDS roscpp rospy std_msgs pcl_conversions pcl_ros octomap_msgs octomap_ros message_runtime
  ${EXTERNAL_INCLUDE_DIRS}
  LIBRARIES ${EXTERNAL_LIBS}
- DEPENDS system_lib octomap_msgs octomap_ros
+ DEPENDS system_lib octomap_msgs octomap_ros Eigen3
 )
 
 ###########
@@ -122,15 +125,22 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
+
 include_directories(
   include/
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS} 
-
+  ${GAZEBO_INCLUDE_DIRS}
+ # ${Eigen3_INCLUDE_DIRS}  
+  /usr/include/eigen3
 )
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
+link_directories(${GAZEBO_LIBRARY_DIRS})
+add_definitions(${GAZEBO_CXX_FLAGS})
+
+set(EXTERNAL_INCLUDE_DIRS ${Eigen_INCLUDE_DIRS} )
 set(EXTERNAL_INCLUDE_DIRS ${PCL_INCLUDE_DIRS} )
 set(EXTERNAL_LIBS ${PCL_LIBRARIES} )
 
@@ -167,6 +177,10 @@ set(EXTERNAL_LIBS ${PCL_LIBRARIES} )
 
 add_executable(region_growing_segmentation_node src/region_growing_segmentation_node.cpp)
 target_link_libraries (region_growing_segmentation_node ${PCL_LIBRARIES} ${catkin_LIBRARIES} )
+
+find_package(octomap REQUIRED)
+add_library(gazebo_world_octomap_plugin SHARED src/world_to_octomap_plugin.cpp)
+target_link_libraries(gazebo_world_octomap_plugin ${target_linking_LIBRARIES} ${GAZEBO_LIBRARIES})
 
 #############
 ## Install ##

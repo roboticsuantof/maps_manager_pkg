@@ -2,7 +2,7 @@
 	
 	<!-- <arg name="map_file" default="teatro"/> -->
     <!-- <arg name="path_map_file" default="$(find marsupial_optimizer)/maps/$(arg map_file).bt"/> -->
-	<arg name="map_file" default="agriculture"/>
+	<arg name="map_file" default="sewer"/>
     <arg name="path_map_file" default="$(find maps_manager_pkg)/maps/$(arg map_file).bt"/>
     
 

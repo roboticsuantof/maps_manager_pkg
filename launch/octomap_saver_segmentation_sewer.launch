@@ -1,0 +1,25 @@
+<launch>
+	<arg name="map_name"	default="map_saved"/>
+	<arg name="proj_map_topic" default="/map"/>
+	<arg name="octomap_in_traversable" default="/octomap_traversable"/>
+	<arg name="octomap_in_obstacles_pos" default="/octomap_obstacles_positive"/>
+	<arg name="octomap_in_obstacles_neg" default="/octomap_obstacles_negative"/>
+
+	<!-- <node pkg="octomap_server" type="octomap_saver" name="octomap_saver_traversable" args=" -f $(arg map_name)_traversability.bt" output="screen">
+		<remap from="/octomap_full" to="$(arg octomap_in_traversable)" />
+		<param name="frame_id" value="world"/>
+	</node> -->
+
+	<node pkg="octomap_server" type="octomap_saver" name="octomap_saver_obstacles_positive" args=" -f $(arg map_name)_obstacles_pos.bt" output="screen">
+		<remap from="/octomap_full" to="$(arg octomap_in_obstacles_pos)" />
+		<param name="frame_id" value="world"/>
+	</node>
+
+	<!-- <node pkg="octomap_server" type="octomap_saver" name="octomap_saver_obstacles_negative" args=" -f $(arg map_name)_obstacles_neg.bt" output="screen">
+		<remap from="/octomap_full" to="$(arg octomap_in_obstacles_neg)" />
+		<param name="frame_id" value="world"/>
+	</node> -->
+
+	<!-- <node pkg="map_server" type="map_saver" name="map_saver" args="-f $(arg map_name) map:=$(arg proj_map_topic)" output="screen"/> -->
+
+</launch>
